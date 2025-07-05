@@ -21,8 +21,12 @@ const CATEGORY_COLORS = {
 export default function ExpenseChart({ transactions }) {
   const grouped = {};
 
-  transactions.forEach(({ amount, date, category }) => {
-    const month = new Date(date).toLocaleString('default', { month: 'short', year: 'numeric' });
+  // Group transactions by month and category
+  transactions.forEach(({ amount, date, category = 'Other' }) => {
+    const month = new Date(date).toLocaleString('default', {
+      month: 'short',
+      year: 'numeric'
+    });
 
     if (!grouped[month]) grouped[month] = {};
 
@@ -33,7 +37,7 @@ export default function ExpenseChart({ transactions }) {
     grouped[month][category] += Number(amount);
   });
 
-  // Convert to array format for Recharts
+  // Prepare data for Recharts
   const data = Object.entries(grouped).map(([month, categories]) => ({
     month,
     ...categories
@@ -48,7 +52,10 @@ export default function ExpenseChart({ transactions }) {
         <BarChart data={data}>
           <XAxis dataKey="month" />
           <YAxis />
-          <Tooltip />
+          <Tooltip
+            formatter={(value) => `₹${value.toFixed(2)}`}
+            labelFormatter={(label) => `Month: ${label}`}
+          />
           <Legend />
           {allCategories.map((cat) => (
             <Bar

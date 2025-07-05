@@ -20,11 +20,11 @@ export default function TransactionTable({ transactions, onEdit, onDelete }) {
         <Table aria-label="transaction table">
           <TableHead>
             <TableRow>
-              <TableCell>Description</TableCell>
-              <TableCell>Amount (₹)</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Category</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell><strong>Description</strong></TableCell>
+              <TableCell><strong>Amount (₹)</strong></TableCell>
+              <TableCell><strong>Date</strong></TableCell>
+              <TableCell><strong>Category</strong></TableCell>
+              <TableCell align="right"><strong>Actions</strong></TableCell>
             </TableRow>
           </TableHead>
 
@@ -32,7 +32,7 @@ export default function TransactionTable({ transactions, onEdit, onDelete }) {
             {transactions.map((tx) => (
               <TableRow key={tx._id}>
                 <TableCell>{tx.description}</TableCell>
-                <TableCell>{tx.amount}</TableCell>
+                <TableCell>₹{Number(tx.amount).toFixed(2)}</TableCell>
                 <TableCell>{new Date(tx.date).toLocaleDateString()}</TableCell>
                 <TableCell>{tx.category || 'Other'}</TableCell>
                 <TableCell align="right">

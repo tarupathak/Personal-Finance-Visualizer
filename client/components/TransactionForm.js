@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import {
   TextField,
@@ -48,12 +50,18 @@ export default function TransactionForm({ onSubmit, selectedTransaction, clearSe
   }, [selectedTransaction]);
 
   const handleChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.amount || !formData.description || !formData.category) return;
+    const { amount, description, category } = formData;
+
+    if (!amount || Number(amount) <= 0 || !description.trim() || !category) return;
+
     onSubmit(formData, selectedTransaction?._id);
     setFormData({ amount: '', description: '', date: '', category: 'Other' });
     clearSelection();
@@ -74,6 +82,7 @@ export default function TransactionForm({ onSubmit, selectedTransaction, clearSe
           onChange={handleChange}
           fullWidth
           required
+          inputProps={{ min: 1 }}
         />
 
         <TextField

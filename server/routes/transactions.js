@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Transaction = require("../models/Transaction");
 
-// Get all transactions
 router.get("/", async (req, res) => {
   try {
     const transactions = await Transaction.find().sort({ date: -1 });
@@ -12,7 +11,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Create a transaction
 router.post("/", async (req, res) => {
   try {
     const { amount, description, date, category } = req.body;
@@ -24,7 +22,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Update a transaction
 router.put("/:id", async (req, res) => {
   try {
     const { amount, description, date, category } = req.body;
@@ -39,7 +36,6 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete a transaction
 router.delete("/:id", async (req, res) => {
   try {
     await Transaction.findByIdAndDelete(req.params.id);

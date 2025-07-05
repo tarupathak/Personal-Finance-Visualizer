@@ -15,11 +15,13 @@ import AddIcon from "@mui/icons-material/Add";
 import TransactionForm from "@/components/TransactionForm";
 import TransactionTable from "@/components/TransactionTable";
 import ExpenseChart from "@/components/ExpenseChart";
-import CategoryPieChart from '@/components/CategoryPieChart';
-import DashboardSummary from '@/components/DashboardSummary';
+import CategoryPieChart from "@/components/CategoryPieChart";
+import DashboardSummary from "@/components/DashboardSummary";
+import BudgetComparisonChart from "@/components/BudgetComparisonChart";
 
 export default function Home() {
   const [transactions, setTransactions] = useState([]);
+  const [budgets, setBudgets] = useState([]); // 🆕 budgets
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [open, setOpen] = useState(false);
 
@@ -32,8 +34,18 @@ export default function Home() {
     }
   };
 
+  const fetchBudgets = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/budgets");
+      setBudgets(res.data);
+    } catch (error) {
+      console.error("Failed to fetch budgets", error);
+    }
+  };
+
   useEffect(() => {
     fetchTransactions();
+    fetchBudgets();
   }, []);
 
   const handleAddOrUpdate = async (data, id) => {
@@ -72,7 +84,6 @@ export default function Home() {
 
   return (
     <Box className="max-w-7xl mx-auto p-6 space-y-6">
-      {/* Header */}
       <Box className="flex justify-between items-center">
         <Typography variant="h4" fontWeight="bold">
           Personal Finance Tracker
@@ -86,10 +97,8 @@ export default function Home() {
         </Button>
       </Box>
 
-      {/* Summary Cards */}
-      <DashboardSummary transactions={transactions} />
+      <DashboardSummary transactions={transactions} budgets={budgets} />
 
-      {/* Charts */}
       <Box className="flex flex-col lg:flex-row gap-6">
         <Box className="flex-1">
           <ExpenseChart transactions={transactions} />
@@ -99,14 +108,14 @@ export default function Home() {
         </Box>
       </Box>
 
-      {/* Transaction Table */}
+      <BudgetComparisonChart transactions={transactions} budgets={budgets} />
+
       <TransactionTable
         transactions={transactions}
         onDelete={handleDelete}
         onEdit={handleEdit}
       />
 
-      {/* Add/Edit Transaction Dialog */}
       <Dialog open={open} onClose={handleCloseDialog} fullWidth maxWidth="sm">
         <DialogTitle>
           {selectedTransaction ? "Edit Transaction" : "Add Transaction"}

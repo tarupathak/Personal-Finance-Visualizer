@@ -4,14 +4,29 @@ import {
   Button,
   Stack,
   Box,
-  Typography
+  Typography,
+  InputLabel,
+  MenuItem,
+  Select,
+  FormControl
 } from '@mui/material';
+
+const CATEGORY_OPTIONS = [
+  'Food',
+  'Travel',
+  'Bills',
+  'Entertainment',
+  'Shopping',
+  'Health',
+  'Other'
+];
 
 export default function TransactionForm({ onSubmit, selectedTransaction, clearSelection }) {
   const [formData, setFormData] = useState({
     amount: '',
     description: '',
-    date: ''
+    date: '',
+    category: 'Other'
   });
 
   useEffect(() => {
@@ -19,7 +34,15 @@ export default function TransactionForm({ onSubmit, selectedTransaction, clearSe
       setFormData({
         amount: selectedTransaction.amount,
         description: selectedTransaction.description,
-        date: selectedTransaction.date?.split('T')[0] || ''
+        date: selectedTransaction.date?.split('T')[0] || '',
+        category: selectedTransaction.category || 'Other'
+      });
+    } else {
+      setFormData({
+        amount: '',
+        description: '',
+        date: '',
+        category: 'Other'
       });
     }
   }, [selectedTransaction]);
@@ -30,9 +53,9 @@ export default function TransactionForm({ onSubmit, selectedTransaction, clearSe
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.amount || !formData.description) return;
+    if (!formData.amount || !formData.description || !formData.category) return;
     onSubmit(formData, selectedTransaction?._id);
-    setFormData({ amount: '', description: '', date: '' });
+    setFormData({ amount: '', description: '', date: '', category: 'Other' });
     clearSelection();
   };
 
@@ -72,21 +95,29 @@ export default function TransactionForm({ onSubmit, selectedTransaction, clearSe
           fullWidth
         />
 
-        <Stack direction="row" spacing={2}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
+        <FormControl fullWidth required>
+          <InputLabel id="category-label">Category</InputLabel>
+          <Select
+            labelId="category-label"
+            name="category"
+            value={formData.category}
+            label="Category"
+            onChange={handleChange}
           >
+            {CATEGORY_OPTIONS.map((cat) => (
+              <MenuItem key={cat} value={cat}>
+                {cat}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <Stack direction="row" spacing={2}>
+          <Button type="submit" variant="contained" color="primary">
             {selectedTransaction ? 'Update' : 'Add'}
           </Button>
-
           {selectedTransaction && (
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={clearSelection}
-            >
+            <Button variant="outlined" color="secondary" onClick={clearSelection}>
               Cancel
             </Button>
           )}

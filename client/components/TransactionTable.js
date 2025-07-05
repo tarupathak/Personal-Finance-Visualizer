@@ -16,13 +16,14 @@ export default function TransactionTable({ transactions, onEdit, onDelete }) {
     <Paper className="p-4 overflow-x-auto">
       <h2 className="text-xl font-semibold mb-4">Transactions</h2>
 
-      <TableContainer className="min-w-[600px]">
+      <TableContainer className="min-w-[700px]">
         <Table aria-label="transaction table">
           <TableHead>
             <TableRow>
               <TableCell>Description</TableCell>
               <TableCell>Amount (₹)</TableCell>
               <TableCell>Date</TableCell>
+              <TableCell>Category</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -33,6 +34,7 @@ export default function TransactionTable({ transactions, onEdit, onDelete }) {
                 <TableCell>{tx.description}</TableCell>
                 <TableCell>{tx.amount}</TableCell>
                 <TableCell>{new Date(tx.date).toLocaleDateString()}</TableCell>
+                <TableCell>{tx.category || 'Other'}</TableCell>
                 <TableCell align="right">
                   <IconButton onClick={() => onEdit(tx)} color="primary">
                     <EditIcon />

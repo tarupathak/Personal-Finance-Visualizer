@@ -94,7 +94,7 @@ cd client
 npm install
 npm run dev
 
-Frontend runs at: http://localhost:5000
+Frontend runs at: http://localhost:3000
 
 ---
 

@@ -78,7 +78,7 @@ npm install
 
 Create a .env file in the server/ folder:
 
-MONGO_URI=mongodb+srv://pathaktaru2002:hello1234@cluster0.shzcrgp.mongodb.net/finance
+MONGO_URI=your_mongodb_url
 
 Start the backend server:
 
